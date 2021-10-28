@@ -11,8 +11,8 @@ export default function App() {
   const [cart, setCart] = useState([]);
 
   useEffect(() => { //kalau ada update dia ke-trigger
-    setPurchasedItem(cart.reduce((acc, curr) => curr.amount + acc, 0));
-    setTotal(cart.reduce((acc, curr) => curr.amount * curr.price + acc, 0));
+    setPurchasedItem(cart.reduce((account, currency) => currency.amount + account, 0));
+    setTotal(cart.reduce((account, currency) => currency.amount * currency.price + account, 0));
   });
 
   const addToCart = (id) => {
@@ -23,18 +23,18 @@ export default function App() {
       }
     }) 
 
-    const cartById = cart.find((index) => {
+    const cardDenganID = cart.find((index) => {
       if(index.id === id){
         return index.id
       }
     })
 
 
-    if (!cartById) {
+    if (cardDenganID == undefined) {
       setCart([
         ...cart,
         {
-          id,
+          id: id,
           name: menu.name,
           price: menu.price,
           amount: 1,
@@ -45,24 +45,50 @@ export default function App() {
     }
   };
 
+
+  const increaseCartAmount = (id) => {
+
+    const cardDenganID = cart.find((index) => {
+      if(index.id === id){
+        // console.log(id,"======================")
+      return index.id
+      }
+    })
+    console.log(cardDenganID,"kenapa bentuknya array")
+    cardDenganID.amount = cardDenganID.amount + 1;
+    const cartTanpaID = cart.filter((index) => { // bikin arr baru 
+      if(index.id !== id){
+      return index.id
+      }
+    })
+    setCart([...cartTanpaID, cardDenganID]);
+    // console.log(cart)
+
+
+  };
+
   const decreaseCartAmount = (id) => {
-    const cartById = cart.find((o) => o.id === id);
-    cartById.amount = cartById.amount - 1;
-    const cartWithoutActiveId = cart.filter((o) => o.id !== id);
-    if (cartById.amount <= 0) {
-      setCart(cartWithoutActiveId);
+    const cardDenganID = cart.find((index) => {
+      if(index.id === id){
+      return index.id
+      }
+    })
+
+    cardDenganID.amount = cardDenganID.amount - 1;
+    const cartTanpaID = cart.filter((index) => {
+      if(index.id !== id){
+      return index.id
+      }
+    })
+    
+    if (cardDenganID.amount <= 0) {
+      setCart(cartTanpaID);
     } else {
-      setCart([...cartWithoutActiveId, cartById]);
+      setCart([...cartTanpaID, cardDenganID]);
     }
   };
 
-  const increaseCartAmount = (id) => {
-    const cartById = cart.find((o) => o.id === id);
-    cartById.amount = cartById.amount + 1;
-    const cartWithoutActiveId = cart.filter((o) => o.id !== id);
-    setCart([...cartWithoutActiveId, cartById]);
-  };
-
+ 
   return (
     <div className="bg-secondary">
       <Navbar totalItem={purchasedItem} />
@@ -74,7 +100,7 @@ export default function App() {
                 <div className="row">
                   {menus.map((menu) => (
                     <div
-                      key={menu.id}
+                        key={menu.id}
                       className="col-md-4 col-sm-6 col-12 my-2"
                     >
                       <CardProduct
