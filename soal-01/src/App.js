@@ -48,21 +48,24 @@ export default function App() {
 
   const increaseCartAmount = (id) => {
 
-    const cardDenganID = cart.find((index) => {
+    const cardDenganID = cart.find((index) => { // diambil cart yang id nya sama, contoh 3, karena dia dari cart dan bentuk nya objek makanya yang keambil itu objek yang id nya 3 misalnya, gitu, ref:https://www.codegrepper.com/code-examples/javascript/find+method+in+react+js
+
       if(index.id === id){
         // console.log(id,"======================")
       return index.id
       }
     })
-    console.log(cardDenganID,"kenapa bentuknya array")
+
+    console.log(cardDenganID,"ini array")
     cardDenganID.amount = cardDenganID.amount + 1;
     const cartTanpaID = cart.filter((index) => { // bikin arr baru 
       if(index.id !== id){
+      
       return index.id
       }
     })
     setCart([...cartTanpaID, cardDenganID]);
-    // console.log(cart)
+    console.log(cart, "PPPPPP")
 
 
   };
