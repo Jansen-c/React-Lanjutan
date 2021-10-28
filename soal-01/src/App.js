@@ -10,14 +10,26 @@ export default function App() {
   const [purchasedItem, setPurchasedItem] = useState(0);
   const [cart, setCart] = useState([]);
 
-  useEffect(() => {
+  useEffect(() => { //kalau ada update dia ke-trigger
     setPurchasedItem(cart.reduce((acc, curr) => curr.amount + acc, 0));
     setTotal(cart.reduce((acc, curr) => curr.amount * curr.price + acc, 0));
   });
 
   const addToCart = (id) => {
-    const menu = menus.find((o) => o.id === id);
-    const cartById = cart.find((o) => o.id === id);
+
+    const menu = menus.find((index) => {
+      if(index.id === id){
+      return index.id
+      }
+    }) 
+
+    const cartById = cart.find((index) => {
+      if(index.id === id){
+        return index.id
+      }
+    })
+
+
     if (!cartById) {
       setCart([
         ...cart,
@@ -27,7 +39,7 @@ export default function App() {
           price: menu.price,
           amount: 1,
         },
-      ]);
+      ])
     } else {
       increaseCartAmount(id);
     }
